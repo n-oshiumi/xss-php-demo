@@ -63,7 +63,8 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST') {
             <?php foreach ($posts as $post) :  ?>
             <div class="card mb-3">
                 <div class="card-body">
-                    <p class="card-text"><?= $post["content"]; ?></p>
+                    <!-- HTMLやスクリプトタグなどの特殊な文字を変換する -->
+                    <p class="card-text"><?= htmlentities($post["content"], ENT_QUOTES, "UTF-8"); ?></p>
                     <a href="#" class="btn btn-danger">見る</a>
                 </div>
             </div>
