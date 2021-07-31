@@ -13,8 +13,8 @@
 この例では、 sql_injection_phpとします
 
 ```sql
-CREATE DATABASE sql_injection_php;
-USE sql_injection_php;
+CREATE DATABASE xss_test;
+USE xss_test;
 ```
 
 
@@ -22,36 +22,17 @@ USE sql_injection_php;
 
 データベースに入って、SQL文でテーブルを作成します。
 
-- ユーザーテーブルを作成
+
+- 投稿テーブルを作成
 
 ```sql
-CREATE TABLE users (id INT(11) AUTO_INCREMENT PRIMARY KEY, email VARCHAR(191),password VARCHAR(191)) engine=innodb default charset=utf8;
-```
-
-- ユーザーテーブルにデータをいれる
-
-※パスワードは「password」のハッシュにしている
-
-```sql
-INSERT INTO users(email,password) VALUES('test@test.com','$2y$10$UrkWlgzm4TrIFiYEZA9KVeHE3MKlP.uumWK6rxgQ7Q006g0MWTzfi');
-INSERT INTO users(email,password) VALUES('hoge@test.com','$2y$10$UrkWlgzm4TrIFiYEZA9KVeHE3MKlP.uumWK6rxgQ7Q006g0MWTzfi');
-```
-
-- メモテーブルを作成
-
-```sql
-CREATE TABLE memos (id INT(11) AUTO_INCREMENT PRIMARY KEY, user_id INT(11), title VARCHAR(191),content TEXT) engine=innodb default charset=utf8;
+CREATE TABLE posts (id INT(11) AUTO_INCREMENT PRIMARY KEY, content TEXT) engine=innodb default charset=utf8;
 ```
 
 - メモテーブルにデータをいれる
 
 ```sql
-INSERT INTO memos(user_id,title,content) VALUES('1','testメモ1','今日は青空が晴れ渡っていた');
-INSERT INTO memos(user_id,title,content) VALUES('1','testメモ2','8月20日に友達と海に行く');
-INSERT INTO memos(user_id,title,content) VALUES('1','testメモ3','新作のドーナツがでたらしい！！！！');
-INSERT INTO memos(user_id,title,content) VALUES('2','hogeメモ1','健康診断は10月27日にいく');
-INSERT INTO memos(user_id,title,content) VALUES('2','hogeメモ2','明日は有給休暇');
-INSERT INTO memos(user_id,title,content) VALUES('2','hogeメモ3','新作のゲームがもうすぐ発売だ！！');
+INSERT INTO posts(content) VALUES('これは初めての投稿です');
 ```
 
 ## ライブラリをインストールする
@@ -68,7 +49,7 @@ composer install
 
 ```bash
 DB_HOST=localhost
-DB_NAME=sql_injection_test
+DB_NAME=xss_test
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -82,19 +63,4 @@ DB_PASSWORD=
 php -S 127.0.0.1:3000
 ```
 
-これの場合は `http://127.0.0.1:3000` にアクセスして、ログインページが映ればOKです！
-
-
-【ログイン情報】
-メールアドレス: test@test.com
-パスワード： password
-
-
-
-
-# SQLインジェクションについて
-
-ログイン後、検索ページで 「xxx%' OR 1=1;」 と入力して検索すると、作成者が自分(tset@test.com)以外の人のメモも見れてしまいます。これがSQLインジェクションです。
-検索フォームにSQL文を仕込んでおいて、予想とは異なる挙動をさせます。
-
-実際のサービスでSQLインジェクションを試みると犯罪になりますので、絶対にやめてください。
+これの場合は `http://127.0.0.1:3000` にアクセスして、掲示板ページが映ればOKです！
